@@ -28,8 +28,8 @@ The master branch has the following requirements:
 
 * Clone/Copy the files in this directory into `app/Plugin/ParanoidUserUtils`
 * Load the plugin In `app/Config/bootstrap.php`:
-    * With User Event Log add: 'CakePlugin::load('ParanoidUserUtils', array('bootstrap' => true));
-    * Without User Event Log add: `CakePlugin::load('ParanoidUserUtils');
+    * With User Event Log add: `CakePlugin::load('ParanoidUserUtils', array('bootstrap' => true));`
+    * Without User Event Log add: `CakePlugin::load('ParanoidUserUtils');`
 
 ## TODO
 * Write unit tests
