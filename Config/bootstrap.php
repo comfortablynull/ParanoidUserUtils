@@ -18,4 +18,5 @@ CakeLog::config('UserEvent', array(
         'types' => array('Failed Login', 'Successful Login', 
                          'Successful Logout','Requested Reset',
                          'expired_reset','successful_reset'),
+        'scopes' => array('UserEvent')
 ));
