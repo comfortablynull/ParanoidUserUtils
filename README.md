@@ -4,15 +4,18 @@ ParanoidUserUtils
 This project is incomplete and just something I am working on. Hopefully it will be done soon.
 
 ParanoidUserUtils is a collection of components, behaviors, and log engines. It's
-Goal is to provide many features that are not out of the box with CakePHP authentication system
-that developers might want.
+goal is to provide many features that are not inculded out of the box with CakePHP authentication system
+that some developers might want.
 Features include:
-* Authentication system that stores unique salts for each user.
-* An abstract class paranoidpasswordhasher class so other developers can make
+* User creation system that stores unique salts for each user.
+    * Salts created with mcrypt_create_iv and MCRYPT_DEV_URANDOM
+    * Each user has a unique salt stored in the db(No use of Security.Salt).
+* User authentication system that uses unique salt to check passwords against set passwordHasher.
+* An abstract paranoidpasswordhasher class so other developers can make
   hashing components to use with ParanoidFormAuthenticate.
 * User event log.
 * Password reset requests
-* Simple protection from brute force:
+* Simple protection from brute force attacks(through form not db table data):
     * Set max number of failed login attempts for valid users.
     * Set max number of failed login attempts by ip address.
     * Set time out time.
