@@ -10,7 +10,6 @@ App::uses('UserEvent','ParanoidUserUtils.Model');
 class UserEventLog implements CakeLogInterface{
     private $Log;
     public function __construct($options = array()) {
-        parent::__construct();
         $this->Log = ClassRegistry::init('ParanoidUserUtils.UserEvent');
     }
 

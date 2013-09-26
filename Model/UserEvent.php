@@ -21,10 +21,9 @@ class UserEvent extends AppModel {
         return parent::afterFind($results, $primary);
     }
     public function beforeSave($options = array()) {
-//            App::uses('AuthComponent', 'Controller/Component');
-            if($this->data['UserEvent']['user_id'] === null){
-                //if the userid cannot be set the save should fail.
-                $this->data['UserEvent']['user_id'] = 0;//AuthComponent::user('id');
+            if(!isset($this->data['UserEvent']['user_id']) || $this->data['UserEvent']['user_id'] === null){
+                App::uses('AuthComponent', 'Controller/Component');
+                $this->data['UserEvent']['user_id'] = AuthComponent::user('id');
             }
             if(!$this->id){
                 $this->data['UserEvent']['ip'] = ip2long(Router::getRequest()->clientIp(false)); 

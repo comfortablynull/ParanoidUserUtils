@@ -54,8 +54,8 @@ class ParanoidSaltBehavior extends ModelBehavior {
      * Sets the local password hasher property
      */
     private function __loadPasswordHasher(){
-        App::uses('ParanoidHasher','ParanoidUserUtils.Controller/Component/Auth');
-        $this->passwordHasher = new ParanoidHasher($this->settings[$this->modelAlias]);
+        App::uses('ParanoidPasswordHasher','ParanoidUserUtils.Controller/Component/Auth');
+        $this->passwordHasher = new ParanoidPasswordHasher($this->settings[$this->modelAlias]);
     }
     /**
      * Gets the current salt for a existing user
