@@ -10,12 +10,16 @@
  *
  * @author dcaiazzo
  */
-
+//This is here so irrelvant errors don't get written to the database
 App::uses('CakeLog', 'Log');
+CakeLog::config('error', array(
+	'engine' => 'FileLog',
+	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
+	'file' => 'error',
+));
 CakeLog::config('UserEvent', array(
         'engine' => 'ParanoidUserUtils.UserEvent',
         'model' => 'ParanoidUserUtils.UserEvent',
-        'types' => array('Failed Login', 'Successful Login', 
-                         'Successful Logout','Requested Reset',
-                         'expired_reset','successful_reset'),
+        'types' => array('login_error', 'login_success', 'logout_success', 
+                         'pwreset_request', 'information', 'action'),
 ));

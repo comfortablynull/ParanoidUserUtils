@@ -52,7 +52,7 @@ class ParanoidFormAuthenticate extends FormAuthenticate {
 			'contain' => $this->settings['contain'],
 		));
 		if (empty($result[$model])) {
-                        CakeLog::write("Failed Login","User Not Found");
+                        CakeLog::write("login_error","User Not Found");
                         //Generating a fresh salt will probably be picked up in a time attack.
 			$this->passwordHasher()->hashWithSecuritySalt($password);
                         unset($password);
@@ -61,14 +61,14 @@ class ParanoidFormAuthenticate extends FormAuthenticate {
 		$user = $result[$model];
 		if ($password) {
                     if (!$this->passwordHasher()->check($password, $user[$fields['password']], $result[$model][$saltField])) {
-                            CakeLog::write("Failed Login", array('message'=>"Invalid Password",'user_id'=>$user['id']));
+                            CakeLog::write("login_error", array('message'=>"Invalid Password",'user_id'=>$user['id']));
                             return false;
                     }
                     unset($user[$fields['password']]);
                     unset($user[$saltField]);
 		}
 		unset($result[$model]);
-                CakeLog::write("Successful Logon","Logged On");
+                CakeLog::write("login_success","Logged On");
 		return array_merge($user, $result);
 	}
 }
