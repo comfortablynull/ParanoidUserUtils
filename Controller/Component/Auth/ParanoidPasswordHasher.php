@@ -28,7 +28,7 @@ class ParanoidPasswordHasher extends AbstractPasswordHasher {
      * - 'cost' 09 The TWO DIGIT cost parameter to pass to crypt()
      * @var array
      */
-    protected $_config = array('ivsize'=>15, 'hashcost'=>10);
+    protected $_config = array('ivsize'=>16, 'hashcost'=>10);
     /**
      * Generates a salt of ivsize and crypt const using mcrypt_create iv and dev_urandom
      * @return string random salt
