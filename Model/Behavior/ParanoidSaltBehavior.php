@@ -59,7 +59,7 @@ class ParanoidSaltBehavior extends ModelBehavior {
         elseif(isset($model->data[$alias][$passwordField])){
             $this->__loadPasswordHasher();
             $this->__logEvent = true;
-            $salt = $this->__getSalt($model->id);
+            $salt = $this->__getSalt($model);
             $this->__logMessage = array('message'=>'Password Changed');
             $model->data[$alias][$passwordField] =  $this->passwordHasher->hash($model->data[$alias][$passwordField],$salt);
         }
@@ -82,14 +82,14 @@ class ParanoidSaltBehavior extends ModelBehavior {
     }
     /**
      * Gets the current salt for a existing user
-     * @param int $id
+     * @param Model $model
      * @return string
      */
-    private function __getSalt($id){
-        $fields = array($this->modelAlias.'.'.$this->settings[$this->settings[$this->modelAlias]]['fields']['salt']);
-        $conditions = array($this->modelAlias.'.'.$this->modelPrimaryKey=>$id);
+    private function __getSalt(Model $model){
+        $fields = array($this->modelAlias.'.'.$this->settings[$model->alias]['fields']['salt']);
+        $conditions = array($this->modelAlias.'.'.$model->primaryKey=>$model->id);
         $salt = $model->find('first',array('fields'=>$fields,'conditions'=>$conditions));
-        return $salt[$this->modelAlias][$this->settings[$this->settings[$this->modelAlias]]['fields']['salt']];
+        return $salt[$model->alias][$this->settings[$model->alias]['fields']['salt']];
     }
 
 
