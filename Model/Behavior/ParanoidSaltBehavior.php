@@ -25,13 +25,21 @@ class ParanoidSaltBehavior extends ModelBehavior {
      */
     private $__defaults = array('fields'=>array('salt'=>'salt','password'=>'password'),
                               'passwordHasher'=>'ParanoidUserUtils.ParanoidPasswordHasher',
-                              'settings'=>array()
-                             );   
+                              'settings'=>array(),
+                              'log' => true,
+                              'logType'=>'account'
+                             );
+    /**
+     * The message to log
+     * @var mixed string/array
+     */
+    private $__logMessage = array('message'=>'','user_id'=>null);
+    private $__logEvent = false;
     function setup(Model $model, $config = array()) {
         $this->modelAlias = $model->alias;
         $this->settings[$model->alias] = array_merge($config,$this->__defaults);
     }
-
+    
     function cleanup(Model $model) {
         parent::cleanup($model);
     }
@@ -45,12 +53,23 @@ class ParanoidSaltBehavior extends ModelBehavior {
             $password = $model->data[$alias][$passwordField];
             $model->data[$alias][$saltField] = $salt;
             $model->data[$alias][$passwordField] = $this->passwordHasher->hash($password, $salt);
+            $this->__logMessage = array('message'=>'Account Created');
+            $this->__logEvent = true;
         }
         elseif(isset($model->data[$alias][$passwordField])){
             $this->__loadPasswordHasher();
+            $this->__logEvent = true;
             $salt = $this->__getSalt($model->id);
+            $this->__logMessage = array('message'=>'Password Changed');
             $model->data[$alias][$passwordField] =  $this->passwordHasher->hash($model->data[$alias][$passwordField],$salt);
         }
+    }
+    function afterSave(Model $model, $created) {
+        if($this->__logEvent === true && $this->settings[$model->alias]['log']){
+            $this->__logMessage['user_id'] =  $model->id;
+            CakeLog::write($this->settings[$model->alias]['logType'], $this->__logMessage);
+        }
+        parent::afterSave($model, $created);
     }
     /**
      * Lazy loads the password hasher.

@@ -20,6 +20,6 @@ CakeLog::config('error', array(
 CakeLog::config('UserEvent', array(
         'engine' => 'ParanoidUserUtils.UserEvent',
         'model' => 'ParanoidUserUtils.UserEvent',
-        'types' => array('login_error', 'login_success', 'logout_success', 
-                         'pwreset_request', 'information', 'action'),
+        'types' => array('login_error', 'login_success', 'logout_success', 'account', 
+                         'pwreset_request', 'action'),
 ));
