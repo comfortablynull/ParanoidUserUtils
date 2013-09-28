@@ -15,18 +15,21 @@ class ParanoidSaltBehavior extends ModelBehavior {
      * the constructor are merged with this property.
      * 
      * `fields` The fields to use to generate a unique salt
-     * - 'ivsize' 16 The size of the iv for mcrypt_create_iv to use
-     * - 'cost' 09 The TWO DIGIT cost parameter to pass to crypt()
      * - 'salt' field in the db that the salt is stored
      * - 'password' field in the db taht the password is stored
+     * 'PasswordHasher' the component/plugin component of the desired password hasher
+     * 'settings' The settings for the password hasher
+     * - 'ivsize' 16 The size of the iv for mcrypt_create_iv to use
+     * - 'cost' 09 The TWO DIGIT cost parameter to pass to crypt()
      * @var array
      */
-    private $defaults = array('salt'=>'salt','password'=>'password',);   
-    private $modelAlias;
-    private $passwordHasher;
+    private $__defaults = array('fields'=>array('salt'=>'salt','password'=>'password'),
+                              'passwordHasher'=>'ParanoidUserUtils.ParanoidPasswordHasher',
+                              'settings'=>array()
+                             );   
     function setup(Model $model, $config = array()) {
         $this->modelAlias = $model->alias;
-        $this->settings[$model->alias] = array_merge($config,$this->defaults);
+        $this->settings[$model->alias] = array_merge($config,$this->__defaults);
     }
 
     function cleanup(Model $model) {
@@ -34,8 +37,8 @@ class ParanoidSaltBehavior extends ModelBehavior {
     }
     function beforeSave(Model $model) {
         $alias = $model->alias;
-        $saltField = $this->settings[$alias]['salt'];
-        $passwordField = $this->settings[$alias]['password'];
+        $saltField = $this->settings[$alias]['fields']['salt'];
+        $passwordField = $this->settings[$alias]['fields']['password'];
         if(!$model->id){
             $this->__loadPasswordHasher();
             $salt = $this->passwordHasher->generateSalt($this->settings[$alias]);
@@ -54,8 +57,9 @@ class ParanoidSaltBehavior extends ModelBehavior {
      * Sets the local password hasher property
      */
     private function __loadPasswordHasher(){
-        App::uses('ParanoidHasher','ParanoidUserUtils.Controller/Component/Auth');
-        $this->passwordHasher = new ParanoidHasher($this->settings[$this->modelAlias]);
+        list($plugin, $hasherClass) = pluginSplit($this->settings[$this->modelAlias]['passwordHasher'],true);
+        App::uses($hasherClass,$plugin.'Controller/Component/Auth');
+        $this->passwordHasher = new $hasherClass($this->settings[$this->modelAlias]['settings']);
     }
     /**
      * Gets the current salt for a existing user
@@ -63,10 +67,10 @@ class ParanoidSaltBehavior extends ModelBehavior {
      * @return string
      */
     private function __getSalt($id){
-        $fields = array($this->modelAlias.'.'.$this->settings[$this->settings[$this->modelAlias]]['salt']);
+        $fields = array($this->modelAlias.'.'.$this->settings[$this->settings[$this->modelAlias]]['fields']['salt']);
         $conditions = array($this->modelAlias.'.'.$this->modelPrimaryKey=>$id);
         $salt = $model->find('first',array('fields'=>$fields,'conditions'=>$conditions));
-        return $salt[$this->modelAlias][$this->settings[$this->settings[$this->modelAlias]]['salt']];
+        return $salt[$this->modelAlias][$this->settings[$this->settings[$this->modelAlias]]['fields']['salt']];
     }
 
 
