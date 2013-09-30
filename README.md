@@ -38,9 +38,9 @@ The master branch has the following requirements:
 * Write unit tests
 * Test with said unit tests
 * Create Schema(tables not done this is why it is not included)
-* Make ParanoidFormAuthenticate component more portable.
-* Make ParanoidFormPasswordHasher component portable.
-* Make ParanoidSaltBehavior behavior portable.
+* ~Make ParanoidFormAuthenticate component more portable.~
+* ~Make ParanoidFormPasswordHasher component portable.~
+* ~Make ParanoidSaltBehavior behavior portable.~
 * Make UserEventLog portable.
 * Create the password reset behavior.
 * Create views and controllers
