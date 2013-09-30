@@ -24,11 +24,11 @@ class ParanoidFormAuthenticate extends FormAuthenticate {
      * @var array 
      */
     protected $_logMessage = array('type'=>null, 'message'=>null);
+    protected $_defaults = array('fields'=>array('salt'=>'salt'), 
+                                'passwordHasher'=>'ParanoidUserUtils.ParanoidBlowfish',
+                                'log'=>true);
     public function __construct(ComponentCollection $collection, $settings) {
-        $this->settings['fields']['salt'] = 'salt';
-        $this->settings['passwordHasher'] = 'ParanoidUserUtils.ParanoidPassword';
-        $this->settings['log'] = true;
-        parent::__construct($collection, $settings);
+        parent::__construct($collection, array_merge($this->_defaults,$settings));
     }
     public function __destruct() {
         //easier to do 1 check for logging instead of multiple 

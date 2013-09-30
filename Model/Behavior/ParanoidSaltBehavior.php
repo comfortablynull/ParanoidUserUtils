@@ -24,7 +24,7 @@ class ParanoidSaltBehavior extends ModelBehavior {
      * @var array
      */
     private $__defaults = array('fields'=>array('salt'=>'salt','password'=>'password'),
-                              'passwordHasher'=>'ParanoidUserUtils.ParanoidPasswordHasher',
+                              'passwordHasher'=>'ParanoidUserUtils.ParanoidBlowfish',
                               'settings'=>array(),
                               'log' => true,
                               'logType'=>'account'

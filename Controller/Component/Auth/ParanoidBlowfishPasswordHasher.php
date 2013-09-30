@@ -18,7 +18,7 @@
  * @author David Caiazzo
  */
 App::uses('AbstractPasswordHasher', 'Controller/Component/Auth');
-class ParanoidPasswordHasher extends AbstractPasswordHasher {
+class ParanoidBlowfishPasswordHasher extends AbstractPasswordHasher {
     /**
      * Configurations for this object. Settings passed from authenticator class to
      * the constructor are merged with this property.
