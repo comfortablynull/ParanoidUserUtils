@@ -77,6 +77,7 @@ class ParanoidSaltBehavior extends ModelBehavior {
      */
     private function __loadPasswordHasher(){
         list($plugin, $hasherClass) = pluginSplit($this->settings[$this->modelAlias]['passwordHasher'],true);
+        $hasherClass .= 'PasswordHasher';
         App::uses($hasherClass,$plugin.'Controller/Component/Auth');
         $this->passwordHasher = new $hasherClass($this->settings[$this->modelAlias]['settings']);
     }
